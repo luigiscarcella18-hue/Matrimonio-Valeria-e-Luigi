@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luigi & Valeria — Il nostro Matrimonio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           1. VARIABILI E DESIGN SYSTEM
+           ========================================================================== */
+        :root {
+            --color-bg: #F4F1EA;          
+            --color-surface: #FFFFFF;
+            --color-primary: #5C4B71;    /* Viola Melanzana/Lavanda Scuro */
+            --color-secondary: #967BB6;  /* Lavanda Elegante */
+            --color-sage: #8A9A86;       /* Verde Salvia Raffinato */
+            --color-sage-light: #F2F5F1; /* Verde Salvia Molto Chiaro */
+            --color-accent: #8A795D;     /* Dettaglio Oro/Malva Caldo */
+            --color-text: #4A4A4A;      /* Grigio Antracite */
+            --color-light-bg: #F7F5FA;   /* Lilla Molto Chiaro */
+            --color-border: #E2DBD6;
+            
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        /* ==========================================================================
+           2. RESET E STRUTTURA
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-sans);
+            font-weight: 300;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Blocco scroll fisso finché la copertina è attiva */
+        body.no-scroll {
+            overflow: hidden !important;
+            height: 100vh;
+        }
+
+        /* ==========================================================================
+           3. COVER INTRO ANIMATA (PURA FOTO A TUTTO SCHERMO CON DISSOLVENZA)
+           ========================================================================== */
+        .intro-cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.25)), 
+                        url('https://i.postimg.cc/fLQ1htsw/PXL-20260630-184617040.jpg') center 70% / cover no-repeat;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 120px; /* Posizionato leggermente più in alto */
+            color: #FFFFFF;
+            transition: opacity 1s ease, visibility 1s ease;
+            cursor: pointer;
+        }
+
+        .intro-cover.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .click-btn {
+            background: rgba(92, 75, 113, 0.75);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            padding: 16px 32px;
+            border-radius: 30px;
+            color: #FFFFFF;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        /* Contenitore principale a scheda */
+        .page-wrapper {
+            max-width: 960px;
+            margin: 20px auto;
+            background-color: var(--color-surface);
+            box-shadow: 0 12px 40px rgba(92, 75, 113, 0.08);
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+        }
+
+        /* Animazioni fluide allo scorrimento */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           4. INTESTAZIONE GRAFICA (HERO DEL SITO - TARGHETTA ALTA)
+           ========================================================================== */
+        .hero {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), 
+                        url('https://i.postimg.cc/fLQ1htsw/PXL-20260630-184617040.jpg') center 75% / cover no-repeat;
+            color: #FFFFFF;
+        }
+        .hero-content {
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 18px 25px;
+            background-color: rgba(92, 75, 113, 0.55);
+            backdrop-filter: blur(4px);
+            max-width: 460px;
+            width: 90%;
+            margin-top: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            border-radius: 6px;
+        }
+        .hero-subtitle {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+            color: #F7F5F0;
+        }
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .hero-date {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-style: italic;
+            color: #F7F5F0;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        /* ==========================================================================
+           5. SEZIONE COUNTDOWN
+           ========================================================================== */
+        .section-countdown {
+            background-color: var(--color-light-bg);
+            padding: 40px 20px;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .countdown-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+        .countdown-box {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 15px 10px;
+            flex: 1;
+            box-shadow: 0 4px 12px rgba(92, 75, 113, 0.04);
+        }
+        .countdown-number {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+        .countdown-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-sage);
+            font-weight: 500;
+        }
+
+        /* ==========================================================================
+           6. SEZIONE BENVENUTO E GALLERIA
+           ========================================================================== */
+        .section-welcome {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 60px 20px 30px 20px;
+        }
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 2.3rem;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 1px;
+            background-color: var(--color-sage);
+            margin: 12px auto 0 auto;
+        }
+        .welcome-message {
+            font-size: 1.05rem;
+            color: var(--color-text);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .gallery-container {
+            padding: 0 20px 50px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--color-border);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        /* ==========================================================================
+           7. SEZIONE TIMELINE IMMAGINE
+           ========================================================================== */
+        .section-timeline {
+            background-color: var(--color-surface);
+            padding: 60px 20px;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+        .timeline-image-wrapper {
+            max-width: 650px;
+            margin: 30px auto 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            border: 1px solid var(--color-border);
+        }
+        .timeline-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ==========================================================================
+           8. SEZIONE LOCATION
+           ========================================================================== */
+        .section-location {
+            background-color: var(--color-sage-light);
+            padding: 70px 20px;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .location-card {
+            background-color: var(--color-surface);
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid var(--color-border);
+        }
+        .map-wrapper {
+            margin-top: 25px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--color-border);
+        }
+
+        /* ==========================================================================
+           9. SEZIONE IBAN / LISTA NOZZE
+           ========================================================================== */
+        .section-gift {
+            background-color: var(--color-surface);
+            padding: 70px 20px;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .gift-card {
+            background-color: var(--color-light-bg);
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(92, 75, 113, 0.04);
+            border: 1px solid var(--color-border);
+        }
+        .iban-box {
+            background-color: var(--color-surface);
+            padding: 18px;
+            border-radius: 6px;
+            border: 1px dashed var(--color-sage);
+            margin: 20px auto;
+            max-width: 500px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--color-primary);
+            letter-spacing: 1px;
+        }
+
+        /* ==========================================================================
+           10. SEZIONE RSVP & MODULO
+           ========================================================================== */
+        .section-rsvp {
+            background-color: var(--color-light-bg);
+            padding: 80px 20px;
+        }
+        .rsvp-card {
+            background-color: var(--color-surface);
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid var(--color-border);
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background-color: #FAFAFA;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-sage);
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(138, 154, 134, 0.15);
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+        }
+        .radio-option {
+            flex: 1;
+        }
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+        .radio-option label {
+            display: block;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #FAFAFA;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .radio-option input[type="radio"]:checked + label {
+            background-color: var(--color-sage);
+            color: #FFFFFF;
+            border-color: var(--color-sage);
+        }
+        .btn-submit {
+            width: 100%;
+            background-color: var(--color-primary);
+            color: #FFFFFF;
+            border: none;
+            padding: 16px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            background-color: var(--color-sage);
+            transform: translateY(-1px);
+        }
+        .status-message {
+            display: none;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        .status-message.success {
+            display: block;
+            background-color: #E8F5E9;
+            color: #2E7D32;
+            border: 1px solid #C8E6C9;
+        }
+
+        /* ==========================================================================
+           11. FOOTER
+           ========================================================================== */
+        footer {
+            padding: 50px 20px;
+            background-color: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+        }
+        .footer-wish {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+        .footer-names {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--color-sage);
+        }
+
+        /* RESPONSIVE SMARTPHONE */
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .page-wrapper { border-radius: 0; border: none; box-shadow: none; margin: 0; }
+            .hero-title { font-size: 2.3rem; }
+            .rsvp-card, .location-card, .gift-card { padding: 25px; }
+            .radio-group { flex-direction: column; gap: 10px; }
+            .countdown-grid { gap: 8px; }
+            .countdown-number { font-size: 1.5rem; }
+            .intro-cover { padding-bottom: 140px; }
+        }
+    </style>
+</head>
+<body class="no-scroll">
+
+    <!-- COVER INTRO ANIMATA (SOLO PREMI PER DISSOLVERE) -->
+    <div class="intro-cover" id="introCover">
+        <div class="click-btn">
+            Premi per scoprire ✨
+        </div>
+    </div>
+
+    <!-- CONTENITORE PRINCIPALE DEL SITO -->
+    <div class="page-wrapper">
+
+        <!-- INTESTAZIONE GRAFICA (HERO) -->
+        <header class="hero">
+            <div class="hero-content">
+                <p class="hero-subtitle">Ci Sposiamo!</p>
+                <h1 class="hero-title">Luigi &amp; Valeria</h1>
+                <p class="hero-date">10 Giugno 2027 • Villa Fabrizia (Bertonico)</p>
+            </div>
+        </header>
+
+        <!-- SEZIONE COUNTDOWN -->
+        <section class="section-countdown reveal">
+            <h3 class="countdown-title">Mancano solo</h3>
+            <div class="countdown-grid">
+                <div class="countdown-box">
+                    <div id="days" class="countdown-number">00</div>
+                    <div class="countdown-label">Giorni</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="hours" class="countdown-number">00</div>
+                    <div class="countdown-label">Ore</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="minutes" class="countdown-number">00</div>
+                    <div class="countdown-label">Minuti</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="seconds" class="countdown-number">00</div>
+                    <div class="countdown-label">Secondi</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEZIONE BENVENUTO -->
+        <section class="section-welcome reveal">
+            <h2 class="section-title">Benvenuti al nostro giorno speciale</h2>
+            <p class="welcome-message">
+                Siamo felici di condividere con voi la gioia del nostro matrimonio. In questo spazio troverete tutti i dettagli sull'evento e potrete confermare la vostra presenza. Non vediamo l'ora di festeggiare insieme!
+            </p>
+        </section>
+
+        <!-- SEZIONE FOTO -->
+        <div class="gallery-container reveal">
+            <div class="gallery-item">
+                <img src="https://i.postimg.cc/m2gJRWvn/IMG-6825.jpg" alt="Luigi e Valeria">
+            </div>
+        </div>
+
+        <!-- SEZIONE TIMELINE IMMAGINE -->
+        <section class="section-timeline reveal">
+            <h2 class="section-title">Programma della Giornata</h2>
+            <div class="timeline-image-wrapper">
+                <img src="https://i.postimg.cc/NfRGrQBF/Gemini-Generated-Image-n5e3b2n5e3b2n5e3.jpg" alt="Programma della Giornata Matrimonio Luigi e Valeria">
+            </div>
+        </section>
+
+        <!-- SEZIONE LOCATION -->
+        <section class="section-location reveal">
+            <div class="location-card">
+                <h2 class="section-title" style="color: var(--color-sage);">La Location</h2>
+                <p class="welcome-message" style="margin-bottom: 15px;">
+                    Il ricevimento si terrà nella splendida cornice di <strong>Villa Fabrizia</strong>, situata a <strong>Bertonico (Lodi)</strong>. Un luogo incantevole immerso nel verde dove festeggiare insieme questo traguardo.
+                </p>
+                <p style="font-size: 0.95rem; color: var(--color-text); margin-bottom: 20px;">
+                    🚗 <em>Come arrivare:</em> Facilmente raggiungibile in auto dalla viabilità principale della provincia di Lodi, con ampio parcheggio riservato agli ospiti all'interno della struttura.
+                </p>
+                <div class="map-wrapper">
+                    <iframe 
+                        src="https://maps.google.com/maps?q=Villa+Fabrizia,+Bertonico,+Lodi&t=&z=15&ie=UTF8&output=embed" 
+                        width="100%" 
+                        height="320" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEZIONE IBAN -->
+        <section class="section-gift reveal">
+            <div class="gift-card">
+                <h2 class="section-title" style="color: var(--color-primary); font-size: 2rem;">Un Pensiero per il Futuro</h2>
+                <p class="welcome-message" style="margin-bottom: 15px; font-size: 1rem;">
+                    La vostra presenza è per noi il regalo più grande. Per chi desiderasse contribuire al nostro viaggio di nozze o ai nostri progetti futuri, abbiamo predisposto un comodo contributo tramite bonifico:
+                </p>
+                <div class="iban-box">
+                    IBAN: IT00 X000 0000 0000 0000 0000 000
+                    <br><span style="font-size: 0.8rem; font-family: var(--font-sans); color: var(--color-text); display:inline-block; margin-top:5px;">Intestato a: Luigi & Valeria</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--color-text); font-style: italic;">
+                    "Nessun obbligo o pressione: per chi preferisce la tradizione, la classica busta nel giorno del matrimonio sarà accolta con lo stesso identico affetto!"
+                </p>
+            </div>
+        </section>
+
+        <!-- SEZIONE FORM RSVP -->
+        <section class="section-rsvp reveal" id="rsvp">
+            <div class="rsvp-card">
+                <h2 class="section-title" style="margin-bottom: 30px; text-align: center; width: 100%;">Conferma Presenza</h2>
+                
+                <form id="weddingRsvpForm" action="https://formspree.io/f/maeqdlaq" method="POST">
+                    <div class="form-group">
+                        <label>Parteciperai?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="attending-yes" name="Partecipazione" value="Ci sarò" required>
+                                <label for="attending-yes">Ci sarò</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="attending-no" name="Partecipazione" value="Non ci sarò">
+                                <label for="attending-no">Non ci sarò</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Nome e Cognome</label>
+                        <input type="text" id="fullName" name="Nome_e_Cognome" class="form-control" placeholder="es. Mario Rossi" required>
+                    </div>
+                    <div class="form-group" id="guestsCountGroup">
+                        <label for="guestsCount">Numero totale di ospiti (te compreso)</label>
+                        <select id="guestsCount" name="Numero_Ospiti" class="form-control">
+                            <option value="1">1 Persona</option>
+                            <option value="2">2 Persone</option>
+                            <option value="3">3 Persone</option>
+                            <option value="4">4 Persone</option>
+                            <option value="5">5+ Persone</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="guestNamesGroup">
+                        <label for="guestNames">Nomi degli altri partecipanti</label>
+                        <input type="text" id="guestNames" name="Altri_Partecipanti" class="form-control" placeholder="es. Anna Verde, Luca Rossi">
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Intolleranze, allergie o esigenze alimentari</label>
+                        <textarea id="notes" name="Note_Allergie" class="form-control" placeholder="Indica qui eventuali celiachie, diete vegetariane, allergie o note per lo staff..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Invia Conferma</button>
+                </form>
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-wish">Con affetto vi aspettiamo</div>
+            <div class="footer-names">Luigi &amp; Valeria — 10 Giugno 2027</div>
+        </footer>
+
+    </div>
+
+    <!-- LOGICA JAVASCRIPT -->
+    <script>
+        // Gestione Copertina Intro solo tramite CLICK/PRESS
+        const introCover = document.getElementById('introCover');
+        let isDismissed = false;
+
+        function dismissIntro() {
+            if (isDismissed) return;
+            isDismissed = true;
+            
+            // Assicura che si trovi in cima alla pagina prima di dissolvere
+            window.scrollTo(0, 0);
+            
+            // Sfuma la copertina
+            introCover.classList.add('hide');
+            
+            // Sblocca lo scroll solo a dissolvenza completata
+            setTimeout(() => {
+                document.body.classList.remove('no-scroll');
+                revealOnScroll();
+            }, 500);
+        }
+
+        // Si attiva SOLO al click o al tap sul pulsante o sullo schermo
+        introCover.addEventListener('click', dismissIntro);
+
+        // Animazione allo scorrimento (Scroll Reveal)
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll(".reveal");
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 80;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add("active");
+                }
+            });
+        }
+
+        window.addEventListener("scroll", revealOnScroll);
+
+        // Countdown al 10 Giugno 2027
+        const weddingDate = new Date('June 10, 2027 00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Logica Modulo RSVP
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('weddingRsvpForm');
+            const attendanceRadios = document.getElementsByName('Partecipazione');
+            const guestsCountGroup = document.getElementById('guestsCountGroup');
+            const guestNamesGroup = document.getElementById('guestNamesGroup');
+            const statusMessage = document.getElementById('statusMessage');
+
+            attendanceRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'Non ci sarò') {
+                        guestsCountGroup.style.display = 'none';
+                        guestNamesGroup.style.display = 'none';
+                    } else {
+                        guestsCountGroup.style.display = 'block';
+                        guestNamesGroup.style.display = 'block';
+                    }
+                });
+            });
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const attendance = document.querySelector('input[name="Partecipazione"]:checked').value;
+                const name = document.getElementById('fullName').value;
+                const count = document.getElementById('guestsCount').value;
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (response.ok) {
+                        statusMessage.className = 'status-message success';
+                        if (attendance === 'Ci sarò') {
+                            statusMessage.innerHTML = `<strong>Grazie ${name}!</strong> Abbiamo ricevuto la tua conferma per ${count} persona/e. Non vediamo l'ora di festeggiare insieme!`;
+                        } else {
+                            statusMessage.innerHTML = `<strong>Grazie ${name}.</strong> Ci dispiace che tu non possa essere dei nostri, ma grazie per averci avvisato!`;
+                        }
+                        form.reset();
+                        setTimeout(() => {
+                            guestsCountGroup.style.display = 'block';
+                            guestNamesGroup.style.display = 'block';
+                        }, 5000);
+                    } else {
+                        statusMessage.className = 'status-message';
+                        statusMessage.style.display = 'block';
+                        statusMessage.style.backgroundColor = '#FFEBEE';
+                        statusMessage.style.color = '#C62828';
+                        statusMessage.innerHTML = "Si è verificato un errore durante l'invio. Riprova più tardi.";
+                    }
+                } catch (error) {
+                    statusMessage.className = 'status-position status-message';
+                    statusMessage.style.display = 'block';
+                    statusMessage.style.backgroundColor = '#FFEBEE';
+                    statusMessage.style.color = '#C62828';
+                    statusMessage.innerHTML = 'Si è verificato un errore di connessione. Riprova più tardi.';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
